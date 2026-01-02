@@ -1,13 +1,85 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>lloradas-recap</title>
+    <title>Lloradas — Tracker</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <h1>Lloradas</h1>
+
+      <section id="auth">
+        <p>Inicia sesión para registrar y ver recaps.</p>
+
+        <label>Email<br /><input id="email" type="email" autocomplete="email" /></label><br /><br />
+        <label>Contraseña<br /><input id="password" type="password" autocomplete="current-password" /></label><br /><br />
+
+        <button id="btnSignUp">Crear cuenta</button>
+        <button id="btnSignIn">Entrar</button>
+
+        <p id="authMsg" style="margin-top:12px;"></p>
+      </section>
+
+      <section id="main" style="display:none;">
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+          <label>Fecha:
+            <input id="day" type="date" />
+          </label>
+          <button id="btnSignOut">Salir</button>
+        </div>
+
+        <p id="whoami" style="margin-top:10px;"></p>
+
+        <div id="notAllowed" style="display:none; margin-top:12px; border:1px solid #ffb3b3; padding:12px; border-radius:10px;">
+          <strong>No autorizado.</strong>
+          <div style="margin-top:6px;">
+            Este usuario no está en <code>allowed_users</code>. Inicia sesión con una de las dos cuentas permitidas.
+          </div>
+        </div>
+
+        <hr />
+
+        <div id="tracker" style="display:none;">
+          <section style="margin-top:12px;">
+            <h2>Registro del día</h2>
+
+            <div class="card">
+              <h3>Tu conteo</h3>
+              <p class="big" id="myCount">—</p>
+
+              <div class="row">
+                <button id="btnPlus">+1 llorada</button>
+                <button id="btnMinus">-1</button>
+              </div>
+
+              <div class="row">
+                <input id="setCount" type="number" min="0" placeholder="Ajustar a N" />
+                <button id="btnSet">Ajustar</button>
+              </div>
+
+              <p class="muted" id="updatedAt"></p>
+            </div>
+
+            <div class="card">
+              <h3>Conteo de ambos (ese día)</h3>
+              <div id="bothCounts"></div>
+            </div>
+
+            <div class="card" id="monthRecapCard" style="display:none;">
+              <h3>Recap del mes (hasta esa fecha)</h3>
+              <div id="monthRecap"></div>
+            </div>
+
+            <div class="card" id="yearRecapCard" style="display:none;">
+              <h3>Recap del año (hasta esa fecha)</h3>
+              <div id="yearRecap"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
