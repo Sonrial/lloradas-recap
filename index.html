@@ -3,82 +3,158 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>Lloradas — Tracker</title>
   </head>
+
   <body>
-    <div id="app">
-      <h1>Lloradas</h1>
-
-      <section id="auth">
-        <p>Inicia sesión para registrar y ver recaps.</p>
-
-        <label>Email<br /><input id="email" type="email" autocomplete="email" /></label><br /><br />
-        <label>Contraseña<br /><input id="password" type="password" autocomplete="current-password" /></label><br /><br />
-
-        <button id="btnSignUp">Crear cuenta</button>
-        <button id="btnSignIn">Entrar</button>
-
-        <p id="authMsg" style="margin-top:12px;"></p>
-      </section>
-
-      <section id="main" style="display:none;">
-        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-          <label>Fecha:
-            <input id="day" type="date" />
-          </label>
-          <button id="btnSignOut">Salir</button>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <!-- ícono simple (gota) -->
+            <svg viewBox="0 0 24 24" width="20" height="20">
+              <path
+                d="M12 2s7 8 7 13a7 7 0 1 1-14 0C5 10 12 2 12 2z"
+                fill="currentColor"
+                opacity="0.9"
+              />
+            </svg>
+          </div>
+          <div>
+            <div class="brand-title">Lloradas</div>
+            <div class="brand-subtitle">Registro diario y recaps</div>
+          </div>
         </div>
 
-        <p id="whoami" style="margin-top:10px;"></p>
+        <div class="topbar-right">
+          <a class="quiet-link" href="#" onclick="return false;">GitHub Pages · Supabase</a>
+        </div>
+      </div>
+    </header>
 
-        <div id="notAllowed" style="display:none; margin-top:12px; border:1px solid #ffb3b3; padding:12px; border-radius:10px;">
-          <strong>No autorizado.</strong>
-          <div style="margin-top:6px;">
+    <main class="container page">
+      <!-- AUTH -->
+      <section id="auth" class="panel">
+        <div class="panel-header">
+          <h1 class="h1">Ingresar</h1>
+          <p class="subtle">Acceso restringido a sus dos cuentas.</p>
+        </div>
+
+        <div class="form-grid">
+          <label class="field">
+            <span>Email</span>
+            <input id="email" type="email" autocomplete="email" placeholder="tucorreo@..." />
+          </label>
+
+          <label class="field">
+            <span>Contraseña</span>
+            <input id="password" type="password" autocomplete="current-password" placeholder="••••••••" />
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="btnSignIn" class="btn primary">Entrar</button>
+          <button id="btnSignUp" class="btn ghost">Crear cuenta</button>
+        </div>
+
+        <p id="authMsg" class="message"></p>
+      </section>
+
+      <!-- APP -->
+      <section id="main" style="display:none;">
+        <div class="toolbar panel">
+          <div class="toolbar-left">
+            <label class="field compact">
+              <span>Fecha</span>
+              <input id="day" type="date" />
+            </label>
+
+            <div id="whoami" class="chip"></div>
+          </div>
+
+          <div class="toolbar-right">
+            <button id="btnSignOut" class="btn danger">Salir</button>
+          </div>
+        </div>
+
+        <div
+          id="notAllowed"
+          class="panel warning"
+          style="display:none; margin-top:14px;"
+        >
+          <div class="warning-title">No autorizado</div>
+          <div class="subtle" style="margin-top:6px;">
             Este usuario no está en <code>allowed_users</code>. Inicia sesión con una de las dos cuentas permitidas.
           </div>
         </div>
 
-        <hr />
+        <div id="tracker" style="display:none; margin-top:14px;">
+          <div class="grid-2">
+            <!-- TU CONTEO (más protagonista + control bonito) -->
+            <section class="card primary-card">
+              <div class="card-header">
+                <h2 class="h2">Tu conteo</h2>
+                <div class="subtle">Registro del día seleccionado</div>
+              </div>
 
-        <div id="tracker" style="display:none;">
-          <section style="margin-top:12px;">
-            <h2>Registro del día</h2>
-
-            <div class="card">
-              <h3>Tu conteo</h3>
-              <p class="big" id="myCount">—</p>
-
-              <div class="row">
-                <button id="btnPlus">+1 llorada</button>
-                <button id="btnMinus">-1</button>
+              <div class="count-control">
+                <button id="btnMinus" class="btn circle ghost" type="button" aria-label="Restar una llorada">−</button>
+                <div class="count count--hero" id="myCount">—</div>
+                <button id="btnPlus" class="btn circle primary" type="button" aria-label="Sumar una llorada">+</button>
               </div>
 
               <div class="row">
-                <input id="setCount" type="number" min="0" placeholder="Ajustar a N" />
-                <button id="btnSet">Ajustar</button>
+                <input id="setCount" class="input" type="number" min="0" placeholder="Ajustar a N" />
+                <button id="btnSet" class="btn" type="button">Ajustar</button>
               </div>
 
-              <p class="muted" id="updatedAt"></p>
+              <div class="footnote" id="updatedAt"></div>
+            </section>
+
+            <!-- AMBOS -->
+            <section class="card">
+              <div class="card-header">
+                <h2 class="h2">Ambos</h2>
+                <div class="subtle">Conteo combinado del día</div>
+              </div>
+
+              <div id="bothCounts" class="list"></div>
+            </section>
+          </div>
+
+          <!-- RECAP MES + GRÁFICA -->
+          <section class="card" id="monthRecapCard" style="display:none;">
+            <div class="card-header">
+              <h2 class="h2">Recap del mes</h2>
+              <div class="subtle">Visible al seleccionar el último día del mes</div>
             </div>
 
-            <div class="card">
-              <h3>Conteo de ambos (ese día)</h3>
-              <div id="bothCounts"></div>
+            <div id="monthRecap" class="list"></div>
+
+            <!-- NUEVO: gráfica mensual -->
+            <div class="chart-wrap" id="monthChartWrap">
+              <canvas id="monthChart"></canvas>
+            </div>
+          </section>
+
+          <!-- RECAP AÑO + GRÁFICA -->
+          <section class="card" id="yearRecapCard" style="display:none;">
+            <div class="card-header">
+              <h2 class="h2">Recap del año</h2>
+              <div class="subtle">Visible al seleccionar 31 de diciembre</div>
             </div>
 
-            <div class="card" id="monthRecapCard" style="display:none;">
-              <h3>Recap del mes (hasta esa fecha)</h3>
-              <div id="monthRecap"></div>
-            </div>
+            <div id="yearRecap" class="list"></div>
 
-            <div class="card" id="yearRecapCard" style="display:none;">
-              <h3>Recap del año (hasta esa fecha)</h3>
-              <div id="yearRecap"></div>
+            <!-- NUEVO: gráfica anual -->
+            <div class="chart-wrap" id="yearChartWrap">
+              <canvas id="yearChart"></canvas>
             </div>
           </section>
         </div>
       </section>
-    </div>
+    </main>
 
     <script type="module" src="/src/main.js"></script>
   </body>
